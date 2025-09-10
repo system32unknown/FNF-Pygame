@@ -20,15 +20,19 @@ clock = pg.time.Clock()
 fpsCounter = FPS()
 FPSfont = pg.font.Font(None, 16)
 
-conductor = Conductor(522)
+def on_handler(step):
+    print("Changed:", step)
+
+conductor = Conductor()
+conductor.changeBpmAt(0, 522)
+conductor.on_measure.append(on_handler)
 
 StringTools = StringTools()
 
 pg.mixer.music.load("assets/song/Inst.ogg")
 pg.mixer.music.play()
 
-def on_handler(step):
-    print("Changed:", step)
+print(conductor.bpm)
 
 running = True
 while running:
@@ -50,8 +54,7 @@ while running:
     fpsCounter.update(ms)
 
     curTime = pg.mixer.music.get_pos() / 1000
-    conductor.time = pg.mixer.music.get_pos() 
-    conductor.on_beat.append(on_handler)
+    conductor.time = pg.mixer.music.get_pos()
     pg.display.set_caption(f'FlxPy ({StringTools.format_time(curTime)})')
 
 pg.quit()
