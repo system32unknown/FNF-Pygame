@@ -2,6 +2,7 @@ import pygame as pg
 import psutil, gc
 
 from backend.FPS import FPS
+from backend.Conductor import Conductor
 from utils.StringTools import StringTools
 from settings import *
 
@@ -19,10 +20,15 @@ clock = pg.time.Clock()
 fpsCounter = FPS()
 FPSfont = pg.font.Font(None, 16)
 
+conductor = Conductor(522)
+
 StringTools = StringTools()
 
 pg.mixer.music.load("assets/song/Inst.ogg")
 pg.mixer.music.play()
+
+def on_step_handler(step):
+    print("Step changed:", step)
 
 running = True
 while running:
@@ -44,6 +50,8 @@ while running:
     fpsCounter.update(ms)
 
     curTime = pg.mixer.music.get_pos() / 1000
+    conductor.time = curTime
+    conductor.on_step.append(on_step_handler)
     pg.display.set_caption(f'FlxPy ({StringTools.format_time(curTime)})')
 
 pg.quit()
