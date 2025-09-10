@@ -31,6 +31,10 @@ class Conductor:
     cur_beat: int = 0
     cur_measure: int = 0
 
+    step_tracker:int = 0
+    beat_tracker:int = 0
+    measure_tracker:int = 0
+
     def __init__(self, initialBpm:float = 100, initialNumerator:float = 4, initialDenominator:float = 4):
         self.changeBpmAt(0, initialBpm, initialNumerator, initialDenominator)
         self.active = True
@@ -44,29 +48,29 @@ class Conductor:
         self._time = value
         calc = (self._time - self.offset_time)
 
-        step_tracker = math.floor(self.step_offset + calc / self.step_crochet)
-        beat_tracker = math.floor(self.beat_offset + calc / self.crochet)
-        measure_tracker = math.floor(self.measure_offset + calc / self.measure_crochet)
+        self.step_tracker = math.floor(self.step_offset + calc / self.step_crochet)
+        self.beat_tracker = math.floor(self.beat_offset + calc / self.crochet)
+        self.measure_tracker = math.floor(self.measure_offset + calc / self.measure_crochet)
 
         if self.active:
-            if self.cur_step != step_tracker:
-                self.cur_step = step_tracker
+            if self.cur_step != self.step_tracker:
+                self.cur_step = self.step_tracker
                 for cb in self.on_step:
                     cb(self.cur_step)
 
-            if self.cur_beat != beat_tracker:
-                self.cur_beat = beat_tracker
+            if self.cur_beat != self.beat_tracker:
+                self.cur_beat = self.beat_tracker
                 for cb in self.on_beat:
                     cb(self.cur_beat)
 
-            if self.cur_measure != measure_tracker:
-                self.cur_measure = measure_tracker
+            if self.cur_measure != self.measure_tracker:
+                self.cur_measure = self.measure_tracker
                 for cb in self.on_measure:
                     cb(self.cur_measure)
         else:
-            self.cur_step = step_tracker
-            self.cur_beat = beat_tracker
-            self.cur_measure = measure_tracker
+            self.cur_step = self.step_tracker
+            self.cur_beat = self.beat_tracker
+            self.cur_measure = self.measure_tracker
 
     def changeBpmAt(self, position:float, newBpm:float = 0, newNumerator:float = 4, newDenominator:float = 4):
         calc = (position - self.offset_time)
