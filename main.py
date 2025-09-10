@@ -12,10 +12,10 @@ pg.init()
 pg.mixer.init()
 
 src = pg.display.set_mode(SRC_SIZE)
-surface = pg.Surface(src.get_size())
-surface = surface.convert_alpha()
+surface = pg.Surface(src.get_size()).convert_alpha()
 
 clock = pg.time.Clock()
+
 fpsCounter = FPS()
 FPSfont = pg.font.Font(None, 16)
 
@@ -47,8 +47,7 @@ while running:
     surface.fill("BLACK")
 
     text = FPSfont.render(f"{fpsCounter.curFPS}FPS\n{StringTools.format_bytes(psutil.Process().memory_info().rss)}", 1, "Red" if fpsCounter.lagged() else "White")
-    textpos = text.get_rect()
-    surface.blit(text, textpos)
+    surface.blit(text, text.get_rect())
     src.blit(surface)
 
     pg.display.flip()
