@@ -46,7 +46,7 @@ while running:
 
     surface.fill("BLACK")
 
-    text = FPSfont.render(f"{fpsCounter.curFPS}FPS\n{StringTools.format_bytes(psutil.Process().memory_info().rss)}", 1, "White")
+    text = FPSfont.render(f"{fpsCounter.curFPS}FPS\n{StringTools.format_bytes(psutil.Process().memory_info().rss)}", 1, "Red" if fpsCounter.lagged() else "White")
     textpos = text.get_rect()
     surface.blit(text, textpos)
     src.blit(surface)
@@ -59,6 +59,6 @@ while running:
 
     curTime = pg.mixer.music.get_pos() / 1000
     conductor.time = pg.mixer.music.get_pos()
-    pg.display.set_caption(f'Ntuzongere kugaruka ({StringTools.format_time(curTime)} - {conductor.bpm}BPM)')
+    pg.display.set_caption(f'{StringTools.format_time(curTime)} - {conductor.bpm}BPM')
 
 pg.quit()

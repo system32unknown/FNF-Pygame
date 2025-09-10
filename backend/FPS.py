@@ -1,15 +1,16 @@
 from settings import *
 
 class FPS:
+    times = []
+    sum = 0
+    slice_cnt = 0
+    curFPS = 0
+    totalFPS = 0
+    avgFPS = 0.0
+    cache_count = 0
+
     def __init__(self, clampFPS:bool = False):
-        self.times = []
-        self.sum = 0
-        self.slice_cnt = 0
-        self.curFPS = 0
-        self.totalFPS = 0
-        self.avgFPS = 0.0
         self.clampFPS = clampFPS
-        self.cache_count = 0
 
     def update(self, dt):
         self.slice_cnt = 0
@@ -30,3 +31,6 @@ class FPS:
             round_avg_fps = round(self.avgFPS)
             self.curFPS = min(round_avg_fps, MAX_FPS) if self.clampFPS else round_avg_fps
         self.cache_count = cur_count
+
+    def lagged(self) -> bool:
+        return self.curFPS < MAX_FPS * .5

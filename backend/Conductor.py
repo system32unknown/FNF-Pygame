@@ -1,3 +1,4 @@
+import math
 from typing import Callable, List
 
 # Original Code by SGWLC, Converted to Py.
@@ -46,9 +47,9 @@ class Conductor:
     def time(self, value: float):
         self._time = value
         calc = (self._time - self.offsetTime)
-        self._stepTracker = int(self.stepOffset + calc / self.stepCrochet)
-        self._beatTracker = int(self.beatOffset + calc / self.crochet)
-        self._measureTracker = int(self.measureOffset + calc / self.measureCrochet)
+        self._stepTracker = math.floor(self.stepOffset + calc / self.stepCrochet)
+        self._beatTracker = math.floor(self.beatOffset + calc / self.crochet)
+        self._measureTracker = math.floor(self.measureOffset + calc / self.measureCrochet)
 
         if self.active:
             if self.curStep != self._stepTracker:
