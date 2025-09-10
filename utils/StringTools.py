@@ -1,5 +1,6 @@
 class StringTools:
-    def fill_number(self, value: float, digits: int, code: int) -> str:
+    @staticmethod
+    def fill_number(value: float, digits: int, code: int) -> str:
         """
         Fill numbers with a specified number of digits and right-align with the number.
         :param value: Floating-point number
@@ -15,8 +16,8 @@ class StringTools:
         else:
             return s
 
-
-    def format_time(self, time: float, precision: int = 0, time_pre: int = 0) -> str:
+    @classmethod
+    def format_time(cls, time: float, precision: int = 0, time_pre: int = 0) -> str:
         """
         Formats a given time in seconds into a human-readable string (weeks, days, hours, minutes, seconds).
         :param time: Floating-point number representing total seconds
@@ -48,17 +49,18 @@ class StringTools:
         if precision > 0:
             seconds_for_ms = time % 60
             seconds = int((seconds_for_ms - int(seconds_for_ms)) * precision)
-            formatted_time += "." + self.fill_number(seconds, time_pre, ord("0"))
+            formatted_time += "." + cls.fill_number(seconds, time_pre, ord("0"))
 
         return formatted_time
     
-    def format_bytes(self, num_bytes: float, precision: int = 2) -> str:
+    @staticmethod
+    def format_bytes(num_bytes: float, precision: int = 2) -> str:
         """
         Takes an amount of bytes and finds the fitting unit.
         Makes sure that the value is below 1024.
         Example: format_bytes(123456789) -> "117.74MB"
         """
-        units = ["B", "kB", "MB", "GB", "TB", "PB"]
+        units = ["B", "KB", "MB", "GB", "TB", "PB"]
         cur_unit = 0
 
         while num_bytes >= 1024 and cur_unit < len(units) - 1:
