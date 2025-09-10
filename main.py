@@ -15,10 +15,8 @@ surface = pg.Surface(src.get_size()).convert_alpha()
 clock = pg.time.Clock()
 
 fpsCounter = FPS()
-FPSfont = pg.font.Font(None, 16)
-
-def on_mhandler(step):
-    print("MEASURE:", step)
+StatsFont = pg.font.Font(None, 16)
+StatsFont2 = pg.font.Font(None, 20)
 
 StringTools = StringTools()
 
@@ -26,11 +24,13 @@ pg.mixer.music.load("assets/song/Inst.ogg")
 pg.mixer.music.play()
 
 conductor = Conductor(522)
-conductor.onMeasure.append(on_mhandler)
 print(f"BPM: {conductor.bpm}")
 
 running = True
 while running:
+    curTime = pg.mixer.music.get_pos() / 1000
+    conductor.time = pg.mixer.music.get_pos()
+
     for e in pg.event.get():
         if e.type == pg.QUIT:
             running = False
@@ -44,8 +44,13 @@ while running:
 
     surface.fill("BLACK")
 
-    text = FPSfont.render(f"{fpsCounter.curFPS}FPS\n{StringTools.format_bytes(psutil.Process().memory_info().rss)}", 1, "Red" if fpsCounter.lagged() else "White")
+    text = StatsFont.render(f"{fpsCounter.curFPS}FPS\n{StringTools.format_bytes(psutil.Process().memory_info().rss)}", 1, "Red" if fpsCounter.lagged() else "White")
     surface.blit(text, text.get_rect())
+
+    text = StatsFont2.render(f"STEP: {conductor.curStep} | BEAT: {conductor.curBeat} | MEASURE: {conductor.curMeasure}", 1, "white")
+    textpos = text.get_rect(centerx = SRC_WIDTH / 2)
+    surface.blit(text, textpos)
+
     src.blit(surface)
 
     pg.display.flip()
@@ -53,9 +58,6 @@ while running:
 
     ms = clock.tick(MAX_FPS)
     fpsCounter.update(ms)
-
-    curTime = pg.mixer.music.get_pos() / 1000
-    conductor.time = pg.mixer.music.get_pos()
     pg.display.set_caption(f'{StringTools.format_time(curTime)} - {conductor.bpm}BPM')
 
 pg.quit()
