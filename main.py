@@ -14,31 +14,35 @@ pg.mixer.init()
 src = pg.display.set_mode(SRC_SIZE)
 surface = pg.Surface(src.get_size())
 surface = surface.convert_alpha()
-surface.fill("BLACK")
 
 clock = pg.time.Clock()
 fpsCounter = FPS()
 FPSfont = pg.font.Font(None, 16)
 
-def on_handler(step):
-    print("Changed:", step)
-
-conductor = Conductor()
-conductor.changeBpmAt(0, 522)
-conductor.on_measure.append(on_handler)
+def on_mhandler(step):
+    print("MEASURE:", step)
 
 StringTools = StringTools()
 
 pg.mixer.music.load("assets/song/Inst.ogg")
 pg.mixer.music.play()
 
-print(conductor.bpm)
+conductor = Conductor(522)
+conductor.onMeasure.append(on_mhandler)
+print(f"BPM: {conductor.bpm}")
 
 running = True
 while running:
     for e in pg.event.get():
         if e.type == pg.QUIT:
             running = False
+        if e.type == pg.KEYDOWN:
+            if e.key == pg.K_r:
+                pg.mixer.music.pause()
+                pg.mixer.music.set_pos(0)
+                pg.mixer.music.play()
+
+                conductor.reset()
 
     surface.fill("BLACK")
 
@@ -55,6 +59,6 @@ while running:
 
     curTime = pg.mixer.music.get_pos() / 1000
     conductor.time = pg.mixer.music.get_pos()
-    pg.display.set_caption(f'FlxPy ({StringTools.format_time(curTime)})')
+    pg.display.set_caption(f'Ntuzongere kugaruka ({StringTools.format_time(curTime)} - {conductor.bpm}BPM)')
 
 pg.quit()

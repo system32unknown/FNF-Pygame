@@ -1,42 +1,41 @@
-import math
 from typing import Callable, List
 
-#Original Code by SGWLC, Converted to Py.
+# Original Code by SGWLC, Converted to Py.
 class Conductor:
     # Event callbacks
-    on_step: List[Callable[[int], None]] = []
-    on_beat: List[Callable[[int], None]] = []
-    on_measure: List[Callable[[int], None]] = []
+    onStep: List[Callable[[int], None]] = []
+    onBeat: List[Callable[[int], None]] = []
+    onMeasure: List[Callable[[int], None]] = []
 
     # Core timing
-    step_crochet: float = 150.0
-    crochet: float = 600.0
-    measure_crochet: float = 2400.0
-    bpm: float = 100.0
-    
-    numerator:float = 4
-    denominator:float = 4
+    stepCrochet: float = 150
+    crochet: float = 600
+    measureCrochet: float = 2400
+    bpm: float = 100
 
     # State
     active: bool = False
-    _time: float = 0.0
+    _time: float = 0
 
     # Trackers
-    offset_time: float = 0.0
-    step_offset: float = 0.0
-    beat_offset: float = 0.0
-    measure_offset: float = 0.0
+    curStep: float = 0
+    curBeat: float = 0
+    curMeasure: float = 0
 
-    cur_step: int = 0
-    cur_beat: int = 0
-    cur_measure: int = 0
+    _stepTracker: float = 0
+    _beatTracker: float = 0
+    _measureTracker: float = 0
 
-    step_tracker:int = 0
-    beat_tracker:int = 0
-    measure_tracker:int = 0
+    stepOffset: float = 0
+    beatOffset: float = 0
+    measureOffset: float = 0
+    offsetTime: float = 0
 
-    def __init__(self, initialBpm:float = 100, initialNumerator:float = 4, initialDenominator:float = 4):
-        self.changeBpmAt(0, initialBpm, initialNumerator, initialDenominator)
+    numerator: float = 4
+    denominator: float = 4
+
+    def __init__(self, initial_bpm:float = 100, initial_numerator:float = 4, initial_denominator:float = 4):
+        self.changeBpmAt(0, initial_bpm, initial_numerator, initial_denominator)
         self.active = True
 
     @property
@@ -46,50 +45,48 @@ class Conductor:
     @time.setter
     def time(self, value: float):
         self._time = value
-        calc = (self._time - self.offset_time)
-
-        self.step_tracker = math.floor(self.step_offset + calc / self.step_crochet)
-        self.beat_tracker = math.floor(self.beat_offset + calc / self.crochet)
-        self.measure_tracker = math.floor(self.measure_offset + calc / self.measure_crochet)
+        calc = (self._time - self.offsetTime)
+        self._stepTracker = int(self.stepOffset + calc / self.stepCrochet)
+        self._beatTracker = int(self.beatOffset + calc / self.crochet)
+        self._measureTracker = int(self.measureOffset + calc / self.measureCrochet)
 
         if self.active:
-            if self.cur_step != self.step_tracker:
-                self.cur_step = self.step_tracker
-                for cb in self.on_step:
-                    cb(self.cur_step)
+            if self.curStep != self._stepTracker:
+                self.curStep = self._stepTracker
+                for cb in self.onStep: cb(self.curStep)
 
-            if self.cur_beat != self.beat_tracker:
-                self.cur_beat = self.beat_tracker
-                for cb in self.on_beat:
-                    cb(self.cur_beat)
+            if self.curBeat != self._beatTracker:
+                self.curBeat = self._beatTracker
+                for cb in self.onBeat: cb(self.curBeat)
 
-            if self.cur_measure != self.measure_tracker:
-                self.cur_measure = self.measure_tracker
-                for cb in self.on_measure:
-                    cb(self.cur_measure)
+            if self.curMeasure != self._measureTracker:
+                self.curMeasure = self._measureTracker
+                for cb in self.onMeasure: cb(self.curMeasure)
         else:
-            self.cur_step = self.step_tracker
-            self.cur_beat = self.beat_tracker
-            self.cur_measure = self.measure_tracker
+            self.curStep = self._stepTracker
+            self.curBeat = self._beatTracker
+            self.curMeasure = self._measureTracker
 
-    def changeBpmAt(self, position:float, newBpm:float = 0, newNumerator:float = 4, newDenominator:float = 4):
-        calc = (position - self.offset_time)
-        self.step_offset += calc / self.step_crochet
-        self.beat_offset += calc / self.crochet
-        self.measure_offset += calc / self.measure_crochet
-        self.offset_time = position
+        return value
 
-        if newBpm > 0:
-            self.bpm = newBpm
+    def changeBpmAt(self, position: float, new_bpm: float = 0, new_numerator: float = 4, new_denominator: float = 4):
+        calc = (position - self.offsetTime)
+        self.stepOffset += calc / self.stepCrochet
+        self.beatOffset += calc / self.crochet
+        self.measureOffset += calc / self.measureCrochet
+        self.offsetTime = position
+
+        if new_bpm > 0:
+            self.bpm = new_bpm
             self.stepCrochet = (15000 / self.bpm)
 
-        self.crochet = self.step_crochet * newNumerator
-        self.measureCrochet = self.crochet * newDenominator
+        self.crochet = self.stepCrochet * new_numerator
+        self.measureCrochet = self.crochet * new_denominator
 
-        self.numerator = newNumerator
-        self.denominator = newDenominator
+        self.numerator = new_numerator
+        self.denominator = new_denominator
 
     def reset(self):
-        self.step_offset, self.beat_offset, self.measure_offset = 0
-        self.offset_time, self.time = 0
+        self.stepOffset, self.beatOffset, self.measureOffset = 0, 0, 0
+        self.offset_time, self.time = 0, 0
         self.changeBpmAt(0)
