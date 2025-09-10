@@ -1,12 +1,10 @@
 import pygame as pg
-import psutil, gc
+import psutil
 
 from backend.FPS import FPS
 from backend.Conductor import Conductor
 from utils.StringTools import StringTools
 from settings import *
-
-gc.get_count()
 
 pg.init()
 pg.mixer.init()
