@@ -49,7 +49,7 @@ while running:
                     pg.mixer.music.play()
                     conductor.reset()
 
-    surface.fill("BLUE")
+    surface.fill("BLACK")
 
     text = StatsFont.render(f"{fpsCounter.curFPS}FPS\n{StringTools.format_bytes(psutil.Process().memory_info().rss)}", 1, "Red" if fpsCounter.lagged() else "White")
     surface.blit(text, text.get_rect())
