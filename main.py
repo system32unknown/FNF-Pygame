@@ -59,12 +59,11 @@ while running:
         if e.type == pg.QUIT:
             running = False
         if e.type == pg.KEYDOWN:
-            match e.key:
-                case pg.K_r:
-                    pg.mixer.music.pause()
-                    pg.mixer.music.set_pos(0)
-                    pg.mixer.music.play()
-                    conductor.reset()
+            if e.key == pg.K_r and songStarted:
+                pg.mixer.music.pause()
+                pg.mixer.music.set_pos(0)
+                pg.mixer.music.play()
+                conductor.reset()
 
     surface.fill("BLACK")
 
