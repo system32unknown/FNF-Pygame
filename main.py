@@ -14,7 +14,6 @@ src = pg.display.set_mode(SRC_SIZE)
 surface = pg.Surface(src.get_size()).convert_alpha()
 
 clock = pg.time.Clock()
-song_tracker:float = 0.0
 
 fpsCounter = FPS()
 StatsFont = pg.font.Font(None, 18)
@@ -28,11 +27,10 @@ pg.mixer.music.set_volume(.5)
 pg.mixer.music.play()
 
 conductor = Conductor(522)
-print(f"BPM: {conductor.bpm}")
 
 running = True
 while running:
-    curTime = pg.mixer.music.get_pos() / 1000
+    curTime = c.get_pos() / 1000
     conductor.time = pg.mixer.music.get_pos()
 
     if not pg.mixer.music.get_busy():
@@ -51,14 +49,14 @@ while running:
 
     surface.fill("BLACK")
 
-    text = StatsFont.render(f"{fpsCounter.curFPS}FPS\n{StringTools.format_bytes(psutil.Process().memory_info().rss)}", 1, "Red" if fpsCounter.lagged() else "White")
+    text = StatsFont.render(f"{fpsCounter.curFPS}FPS\n{StringTools.format_bytes(psutil.Process().memory_info().rss)}", False, "Red" if fpsCounter.lagged() else "White")
     surface.blit(text, text.get_rect())
 
-    text = StatsFont2.render(f"SH: {conductor.curStep} | BH: {conductor.curBeat} | MH: {conductor.curMeasure} | {conductor.bpm}BPM", 1, "white")
+    text = StatsFont2.render(f"SH: {conductor.curStep} | BH: {conductor.curBeat} | MH: {conductor.curMeasure} | {conductor.bpm}BPM", False, "white")
     textpos = text.get_rect(centerx = SRC_WIDTH / 2)
     surface.blit(text, textpos)
 
-    text = StatsFont2.render(f"{StringTools.format_time(curTime)} / {StringTools.format_time(preloaded_music.get_length())}", 1, "white")
+    text = StatsFont2.render(f"{StringTools.format_time(curTime)} / {StringTools.format_time(preloaded_music.get_length())}", False, "white")
     textpos = text.get_rect(centerx = SRC_WIDTH / 2)
     surface.blit(text, (textpos.x, 20))
 
