@@ -100,9 +100,9 @@ while running:
         textpos = text.get_rect(centerx = SRC_WIDTH / 2)
         surface.blit(text, (textpos.x, 20))
 
-        text = ScoreFont.render(f"Score: 0 | NPS: 0 | Hits: 0", False, "white")
-        textpos = text.get_rect(centerx = SRC_WIDTH / 2)
-        surface.blit(text, (textpos.x, SRC_HEIGHT - 20))
+    text = ScoreFont.render(f"Score: 0 | NPS: 0 | Hits: 0", False, "white")
+    textpos = text.get_rect(centerx = SRC_WIDTH / 2)
+    surface.blit(text, (textpos.x, SRC_HEIGHT - 20))
 
     src.blit(surface)
     pg.display.update()
