@@ -1,4 +1,5 @@
 import psutil
+import time
 
 from backend.FPS import FPS
 from backend.Conductor import Conductor
@@ -24,19 +25,33 @@ song_path = "assets/song/Inst.ogg"
 preloaded_music = pg.mixer.Sound(song_path)
 pg.mixer.music.load(song_path)
 pg.mixer.music.set_volume(.5)
-pg.mixer.music.play()
 
-conductor = Conductor(522)
+songStarted = False
+def beatHit(beat:int):
+    global songStarted
+    if beat == 0 and (not songStarted):
+        pg.mixer.music.play()
+        songStarted = True
+
+conductor = Conductor()
+conductor.onBeat.append(beatHit)
+conductor.bpm = 522
+
+start_time = time.time()
+songPosition = -conductor.crochet * 4.5
 
 noteGroup = pg.sprite.Group()
 
 running = True
 while running:
-    curTime = pg.mixer.music.get_pos() / 1000
-    conductor.time = pg.mixer.music.get_pos()
+    ms = clock.tick(MAX_FPS)
+    elapsed_time = time.time() - start_time
+    fpsCounter.update(ms)
 
-    if not pg.mixer.music.get_busy():
-        print("Finished.")
+    curTime = pg.mixer.music.get_pos() / 1000
+    if not songStarted:
+        songPosition = elapsed_time * 1000
+    conductor.time = songPosition
 
     for e in pg.event.get():
         if e.type == pg.QUIT:
@@ -64,8 +79,5 @@ while running:
 
     src.blit(surface)
     pg.display.update()
-
-    ms = clock.tick(MAX_FPS)
-    fpsCounter.update(ms)
 
 pg.quit()
