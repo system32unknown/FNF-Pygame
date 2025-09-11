@@ -19,6 +19,7 @@ clock = pg.time.Clock()
 fpsCounter = FPS()
 StatsFont = pg.font.Font(None, 18)
 StatsFont2 = pg.font.Font("assets/fonts/vcr.ttf", 16)
+ScoreFont = pg.font.Font("assets/fonts/vcr.ttf", 18)
 
 song_name = "Ntuzongere-Kugaruka"
 
@@ -33,14 +34,22 @@ preloaded_music = pg.mixer.Sound(song_path)
 pg.mixer.music.load(song_path)
 pg.mixer.music.set_volume(.5)
 
+countdown_sounds: list[pg.mixer.Sound] = [pg.mixer.Sound(f"assets/sounds/countdown/intro{3 - i}.ogg") for i in range(0, 4)]
+countdown_sounds.reverse()
+
 songStarted = False
 def beatHit(beat:int):
     global songStarted
-    if beat == 0 and not songStarted:
-        conductor.changeBpmAt(0, meta_data['bpm'], meta_data['TimeSignature']['numerator'], meta_data['TimeSignature']['denominator'])
-        conductor.time = 0
-        pg.mixer.music.play()
-        songStarted = True
+
+    if beat < 0:
+        snd = countdown_sounds[beat]
+        if snd != None: snd.play()
+    if not songStarted:
+        if beat == 0:
+            conductor.changeBpmAt(0, meta_data['bpm'], meta_data['TimeSignature']['numerator'], meta_data['TimeSignature']['denominator'])
+            conductor.time = 0
+            pg.mixer.music.play()
+            songStarted = True
 
 conductor = Conductor()
 conductor.onBeat.append(beatHit)
@@ -78,14 +87,19 @@ while running:
     text = StatsFont.render(f"{fpsCounter.curFPS}FPS\n{StringTools.format_bytes(psutil.Process().memory_info().rss)}", False, "Red" if fpsCounter.lagged() else "White")
     surface.blit(text, text.get_rect())
 
-    text = StatsFont2.render(f"SH: {conductor.curStep} | BH: {conductor.curBeat} | MH: {conductor.curMeasure} | {conductor.bpm}BPM", False, "white")
-    textpos = text.get_rect(centerx = SRC_WIDTH / 2)
-    surface.blit(text, textpos)
+    if DEBUG_MODE:
+        text = StatsFont2.render(f"SH: {conductor.curStep} | BH: {conductor.curBeat} | MH: {conductor.curMeasure} | {conductor.bpm}BPM", False, "white")
+        textpos = text.get_rect(centerx = SRC_WIDTH / 2)
+        surface.blit(text, textpos)
 
     if songStarted:
         text = StatsFont2.render(f"{StringTools.format_time(curTime)} / {StringTools.format_time(preloaded_music.get_length())}", False, "white")
         textpos = text.get_rect(centerx = SRC_WIDTH / 2)
         surface.blit(text, (textpos.x, 20))
+
+        text = ScoreFont.render(f"Score: 0 | NPS: 0 | Hits: 0", False, "white")
+        textpos = text.get_rect(centerx = SRC_WIDTH / 2)
+        surface.blit(text, (textpos.x, SRC_HEIGHT - 20))
 
     src.blit(surface)
     pg.display.update()

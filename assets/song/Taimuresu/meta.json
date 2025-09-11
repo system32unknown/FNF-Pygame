@@ -4,5 +4,6 @@
     "TimeSignature": {
         "numerator": 4,
         "denominator": 4
-    }
+    },
+    "needVocals": false
 }
