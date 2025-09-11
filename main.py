@@ -1,8 +1,8 @@
-import pygame as pg
 import psutil
 
 from backend.FPS import FPS
 from backend.Conductor import Conductor
+from obj.Note import Note
 from utils.StringTools import StringTools
 from settings import *
 
@@ -27,6 +27,8 @@ pg.mixer.music.set_volume(.5)
 pg.mixer.music.play()
 
 conductor = Conductor(522)
+
+noteGroup = pg.sprite.Group()
 
 running = True
 while running:

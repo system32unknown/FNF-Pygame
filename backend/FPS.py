@@ -1,4 +1,4 @@
-from settings import *
+from settings import MAX_FPS
 
 class FPS:
     times = []

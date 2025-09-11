@@ -1,8 +1,9 @@
-import pygame as pg
+from settings import *
 
 class StrumNote(pg.sprite.Sprite):
-    def __init__(self, *groups):
-        super().__init__(*groups)
+    downscroll:bool = False
+    def __init__(self):
+        super().__init__()
 
 class Strumline(pg.sprite.Group):
     def __init__(self, *sprites):
