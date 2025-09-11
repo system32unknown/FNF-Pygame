@@ -43,7 +43,7 @@ def beatHit(beat:int):
 
     if beat < 0:
         snd = countdown_sounds[beat]
-        if snd != None: snd.play()
+        if snd: snd.play()
     if not songStarted:
         if beat == 0:
             conductor.changeBpmAt(0, meta_data['bpm'], meta_data['TimeSignature']['numerator'], meta_data['TimeSignature']['denominator'])
@@ -73,8 +73,7 @@ while running:
         print("Finished.")
 
     for e in pg.event.get():
-        if e.type == pg.QUIT:
-            running = False
+        if e.type == pg.QUIT: running = False
         if e.type == pg.KEYDOWN:
             if e.key == pg.K_r and songStarted:
                 pg.mixer.music.pause()
@@ -90,6 +89,10 @@ while running:
     if DEBUG_MODE:
         text = StatsFont2.render(f"SH: {conductor.curStep} | BH: {conductor.curBeat} | MH: {conductor.curMeasure} | {conductor.bpm}BPM", False, "white")
         textpos = text.get_rect(centerx = SRC_WIDTH / 2)
+        surface.blit(text, textpos)
+
+        text = ScoreFont.render(meta_data["songName"], False, "white")
+        textpos = text.get_rect(bottomleft = (0, SRC_HEIGHT))
         surface.blit(text, textpos)
 
     if songStarted:

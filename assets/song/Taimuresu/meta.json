@@ -1,6 +1,6 @@
 {
     "bpm" : 999,
-    "SongName" : "Taimuresu",
+    "songName" : "Taimuresu",
     "TimeSignature": {
         "numerator": 4,
         "denominator": 4
