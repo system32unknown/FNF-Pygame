@@ -30,7 +30,7 @@ conductor = Conductor(522)
 
 running = True
 while running:
-    curTime = c.get_pos() / 1000
+    curTime = pg.mixer.music.get_pos() / 1000
     conductor.time = pg.mixer.music.get_pos()
 
     if not pg.mixer.music.get_busy():
