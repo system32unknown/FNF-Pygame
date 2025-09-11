@@ -1,5 +1,4 @@
 import psutil
-import time
 
 from backend.FPS import FPS
 from backend.Conductor import Conductor
@@ -31,13 +30,13 @@ def beatHit(beat:int):
     global songStarted
     if beat == 0 and (not songStarted):
         pg.mixer.music.play()
+        conductor.time = 0
+        conductor.changeBpmAt(0, 522)
         songStarted = True
 
 conductor = Conductor()
 conductor.onBeat.append(beatHit)
-conductor.bpm = 522
 
-start_time = time.time()
 songPosition = -conductor.crochet * 4.5
 
 noteGroup = pg.sprite.Group()
@@ -45,13 +44,16 @@ noteGroup = pg.sprite.Group()
 running = True
 while running:
     ms = clock.tick(MAX_FPS)
-    elapsed_time = time.time() - start_time
     fpsCounter.update(ms)
 
     curTime = pg.mixer.music.get_pos() / 1000
     if not songStarted:
-        songPosition = elapsed_time * 1000
+        songPosition += ms
+    else: songPosition = pg.mixer.music.get_pos()
     conductor.time = songPosition
+
+    if songStarted and not pg.mixer.music.get_busy():
+        print("Finished.")
 
     for e in pg.event.get():
         if e.type == pg.QUIT:
@@ -73,9 +75,10 @@ while running:
     textpos = text.get_rect(centerx = SRC_WIDTH / 2)
     surface.blit(text, textpos)
 
-    text = StatsFont2.render(f"{StringTools.format_time(curTime)} / {StringTools.format_time(preloaded_music.get_length())}", False, "white")
-    textpos = text.get_rect(centerx = SRC_WIDTH / 2)
-    surface.blit(text, (textpos.x, 20))
+    if songStarted:
+        text = StatsFont2.render(f"{StringTools.format_time(curTime)} / {StringTools.format_time(preloaded_music.get_length())}", False, "white")
+        textpos = text.get_rect(centerx = SRC_WIDTH / 2)
+        surface.blit(text, (textpos.x, 20))
 
     src.blit(surface)
     pg.display.update()
