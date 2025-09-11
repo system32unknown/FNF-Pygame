@@ -28,10 +28,10 @@ pg.mixer.music.set_volume(.5)
 songStarted = False
 def beatHit(beat:int):
     global songStarted
-    if beat == 0 and (not songStarted):
-        pg.mixer.music.play()
-        conductor.time = 0
+    if beat == 0 and not songStarted:
         conductor.changeBpmAt(0, 522)
+        conductor.time = 0
+        pg.mixer.music.play()
         songStarted = True
 
 conductor = Conductor()
