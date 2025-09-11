@@ -1,4 +1,5 @@
 import psutil
+import json
 
 from backend.FPS import FPS
 from backend.Conductor import Conductor
@@ -19,7 +20,14 @@ fpsCounter = FPS()
 StatsFont = pg.font.Font(None, 18)
 StatsFont2 = pg.font.Font("assets/fonts/vcr.ttf", 16)
 
-song_path = "assets/song/Inst.ogg"
+song_name = "Ntuzongere-Kugaruka"
+
+song_path = f"assets/song/{song_name}/Inst.ogg"
+meta_path = f"assets/song/{song_name}/meta.json"
+
+meta_data = None
+with open(meta_path, "rb") as f:
+    meta_data = json.load(f)
 
 preloaded_music = pg.mixer.Sound(song_path)
 pg.mixer.music.load(song_path)
@@ -29,7 +37,7 @@ songStarted = False
 def beatHit(beat:int):
     global songStarted
     if beat == 0 and not songStarted:
-        conductor.changeBpmAt(0, 522)
+        conductor.changeBpmAt(0, meta_data['bpm'], meta_data['TimeSignature']['numerator'], meta_data['TimeSignature']['denominator'])
         conductor.time = 0
         pg.mixer.music.play()
         songStarted = True

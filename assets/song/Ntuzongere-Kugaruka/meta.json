@@ -1,0 +1,8 @@
+{
+    "bpm" : 522,
+    "SongName" : "Never Come Back",
+    "TimeSignature": {
+        "numerator": 4,
+        "denominator": 4
+    }
+}
