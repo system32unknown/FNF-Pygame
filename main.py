@@ -23,15 +23,17 @@ ScoreFont = pg.font.Font("assets/fonts/vcr.ttf", 18)
 
 song_name = "Ntuzongere-Kugaruka"
 
-song_path = f"assets/song/{song_name}/Inst.ogg"
-meta_path = f"assets/song/{song_name}/meta.json"
+music_path = f"assets/song/{song_name}"
+inst_path = music_path + "/Inst.ogg"
+
+meta_path = music_path + "/meta.json"
 
 meta_data = None
 with open(meta_path, "rb") as f:
     meta_data = json.load(f)
 
-preloaded_music = pg.mixer.Sound(song_path)
-pg.mixer.music.load(song_path)
+inst_snd = pg.mixer.Sound(inst_path)
+pg.mixer.music.load(inst_path)
 pg.mixer.music.set_volume(.5)
 
 countdown_sounds: list[pg.mixer.Sound] = [pg.mixer.Sound(f"assets/sounds/countdown/intro{3 - i}.ogg") for i in range(0, 4)]
@@ -57,6 +59,8 @@ conductor.onBeat.append(beatHit)
 songPosition = -conductor.crochet * 4.5
 
 noteGroup = pg.sprite.Group()
+
+timeTxt = "0:00 / 0:00"
 
 running = True
 while running:
@@ -91,16 +95,13 @@ while running:
         textpos = text.get_rect(centerx = SRC_WIDTH / 2)
         surface.blit(text, textpos)
 
-        text = ScoreFont.render(meta_data["songName"], False, "white")
-        textpos = text.get_rect(bottomleft = (0, SRC_HEIGHT))
-        surface.blit(text, textpos)
-
     if songStarted:
-        text = StatsFont2.render(f"{StringTools.format_time(curTime)} / {StringTools.format_time(preloaded_music.get_length())}", False, "white")
+        timeTxt = f"{meta_data["songName"]} ({StringTools.format_time(curTime)} / {StringTools.format_time(inst_snd.get_length())})"
+        text = StatsFont2.render(timeTxt, False, "white")
         textpos = text.get_rect(centerx = SRC_WIDTH / 2)
         surface.blit(text, (textpos.x, 20))
 
-    text = ScoreFont.render(f"Score: 0 | NPS: 0 | Hits: 0", False, "white")
+    text = ScoreFont.render(f"NPS: 0 | Score: 0 | Hits: 0", False, "white")
     textpos = text.get_rect(centerx = SRC_WIDTH / 2)
     surface.blit(text, (textpos.x, SRC_HEIGHT - 20))
 
