@@ -20,5 +20,5 @@ class Note(pg.sprite.Sprite):
         self.rect.center = (SRC_WIDTH // 2 + pos.x, SRC_HEIGHT // 2 + pos.y)
 
     def followStrum(self, strum:StrumNote, time):
-        diff = math.fabs((time - self.time)) * .02
+        diff = math.fabs((self.time - time)) / PLAYBACK_RATE
         self.rect.y = strum + diff
