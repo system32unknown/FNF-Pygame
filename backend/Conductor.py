@@ -35,8 +35,6 @@ class Conductor:
     numerator: float = 4
     denominator: float = 4
 
-    rate:float = 1
-
     def __init__(self, initial_bpm:float = 100, initial_numerator:float = 4, initial_denominator:float = 4):
         self.changeBpmAt(0, initial_bpm, initial_numerator, initial_denominator)
         self.active = True
