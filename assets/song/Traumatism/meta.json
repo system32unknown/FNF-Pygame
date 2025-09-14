@@ -1,0 +1,9 @@
+{
+    "bpm" : 498,
+    "songName" : "Traumatism",
+    "TimeSignature": {
+        "numerator": 4,
+        "denominator": 4
+    },
+    "needVocals": false
+}

@@ -91,3 +91,6 @@ class Conductor:
         self.stepOffset, self.beatOffset, self.measureOffset = 0, 0, 0
         self.offset_time, self.time = 0, 0
         self.changeBpmAt(0)
+
+    def calculateCrochet(self, bpm:float) -> float:
+        return (60 / bpm) * 1000
