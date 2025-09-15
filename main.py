@@ -1,16 +1,17 @@
 import psutil
 import json
-import math
+import os
 
 from backend.FPS import FPS
 from backend.Conductor import Conductor
-from obj.Note import Note
+from backend.Input import Input
 from utils.StringTools import StringTools
 from settings import *
 
 pg.init()
 pg.font.init()
 pg.mixer.init()
+os.system('cls' if os.name == 'nt' else 'clear')
 
 src = pg.display.set_mode(SRC_SIZE)
 surface = pg.Surface(src.get_size()).convert_alpha()
@@ -39,6 +40,9 @@ pg.mixer.music.set_volume(.5)
 
 countdown_sounds: list[pg.mixer.Sound] = [pg.mixer.Sound(f"assets/sounds/countdown/intro{3 - i}.ogg") for i in range(0, 4)]
 countdown_sounds.reverse()
+
+FNFInput = Input(meta_data["mania"])
+print(FNFInput.keysArray)
 
 songStarted = False
 wasReady = False
