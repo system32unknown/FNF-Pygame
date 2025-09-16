@@ -13,17 +13,18 @@ class Input:
     def update(self):
         if self.botPlay:
             return
-
-        keys_pressed = pg.key.get_pressed()
-
-        for i, v in enumerate(self.keyBinds):
-            self.keysArray[i] = keys_pressed[self.keyBinds[v]]
-
-        if DEBUG_MODE:
-            print(f"KEY ARRAYS: {self.keysArray}")
+        
+        self._input()
+        self._released()
 
     def _input(self):
-        pass
+        keys_pressed = pg.key.get_pressed()
+        for i, v in enumerate(self.keyBinds):
+            if self.keysArray[i]: continue
+            self.keysArray[i] = keys_pressed[v]
+        print(self.keysArray)
 
-    def release(Self):
-        pass
+    def _released(self):
+        for i, _ in enumerate(self.keyBinds):
+            if not self.keysArray[i]: continue
+            self.keysArray[i] = False
