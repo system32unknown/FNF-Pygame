@@ -41,8 +41,7 @@ pg.mixer.music.set_volume(.5)
 countdown_sounds: list[pg.mixer.Sound] = [pg.mixer.Sound(f"assets/sounds/countdown/intro{3 - i}.ogg") for i in range(0, 4)]
 countdown_sounds.reverse()
 
-FNFInput = Input(meta_data["mania"])
-print(FNFInput.keysArray)
+fnfInput = Input(meta_data["mania"])
 
 songStarted = False
 wasReady = False
@@ -75,6 +74,7 @@ running = True
 while running:
     ms = clock.tick(MAX_FPS)
     fpsCounter.update(ms)
+    fnfInput.update()
 
     if songStarted:
         curTime = pg.mixer.music.get_pos() / 1000
@@ -92,6 +92,7 @@ while running:
         if e.type == pg.QUIT: running = False
         if e.type == pg.KEYDOWN:
             match e.key:
+                case pg.K_ESCAPE: running = False
                 case pg.K_r:
                     if songStarted:
                         pg.mixer.music.pause()

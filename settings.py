@@ -13,8 +13,8 @@ NOTE_SIZE = [100, 100]
 PLAYBACK_RATE = 1
 
 DEFAULT_KEYBINDS = {
-    ["GAME_LEFT"]: pg.K_d,
-    ["GAME_RIGHT"]: pg.K_f,
-    ["GAME_UP"]: pg.K_j,
-    ["GAME_DOWN"]: pg.K_k
+    "GAME_LEFT": pg.K_d,
+    "GAME_DOWN": pg.K_f,
+    "GAME_UP": pg.K_j,
+    "GAME_RIGHT": pg.K_k
 }
