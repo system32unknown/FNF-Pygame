@@ -21,3 +21,9 @@ class Input:
 
         if DEBUG_MODE:
             print(f"KEY ARRAYS: {self.keysArray}")
+
+    def _input(self):
+        pass
+
+    def release(Self):
+        pass

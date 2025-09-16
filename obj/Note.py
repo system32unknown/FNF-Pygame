@@ -7,11 +7,13 @@ class Note(pg.sprite.Sprite):
     time:float = 0.0
     wasHit:bool = False
     lane:int = 0
+    player:int = 0
 
-    def __init__(self, time:float, lane:int, pos:vec2):
+    def __init__(self, time:float, lane:int, player:int, pos:vec2):
         super().__init__()
         self.time = time
         self.lane = lane
+        self.player = player
 
         self.image = pg.Surface(NOTE_SIZE)
         self.image.convert_alpha()
