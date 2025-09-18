@@ -21,6 +21,9 @@ class Strumline(pg.sprite.Group):
             strum = Receptor(self, i)
             self.add(strum)
 
+    def update(self, e):
+        return super().update(e)
+
 class Receptor(pg.sprite.Sprite):
     parent:Strumline = None
     queueStatic:bool = False
